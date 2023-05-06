@@ -3,35 +3,37 @@ import matplotlib.font_manager as fm
 # projList = ['commons-collections', 'commons-codec', 'commons-fileupload', 'commons-net',
 #             'maven-dependency-plugin', 'commons-configuration']
 projList = [
-    'commons-codec',
-    'commons-fileupload',
-    'commons-net',
-    'maven-dependency-plugin',
-    'commons-collections',
-    'commons-digester',
-    'commons-pool',
-    'commons-dbcp',
     'commons-bcel',
-    'commons-configuration'
+    'commons-codec',
+    'commons-collections',
+    'commons-configuration',
+    'commons-dbcp',
+    'commons-digester',
+    'commons-fileupload',
+    'maven-dependency-plugin',
+    'commons-net',
+    'commons-pool',
 ]
 
 
 picProjList = [
-    'codec',
-    'fileupload',
-    'net',
-    'mavendp',
-    'collections',
-    'digester',
-    'pool',
-    'dbcp',
     'bcel',
-    'configuration'
+    'codec',
+    'collections',
+    'configuration',
+    'dbcp',
+    'digester',
+    'fileupload',
+    'mavendp',
+    'net',
+    'pool'
 ]
 # projName = projList[-1]
 projName = 'commons-bcel'
 
-base_dir = "C:/Users/lxyeah/Desktop/task1/"
+# base_dir = "C:/Users/lxyeah/Desktop/task1/"
+
+base_dir = "/Users/mayang/PycharmProjects/summary2Excel/"
 summary_dir = base_dir + "resource/datas/summary/"
 data_base = base_dir + "resource/datas/"
 data_dir = base_dir + "resource/datas/" + projName + "/"
@@ -65,7 +67,7 @@ fileMap = {"category_line": 0,
            "file_path_line": 11,
            "method_line": 12,
            "field_line": 13,
-           "resolution_line": 14,
+           "resolution_line": 18,
            "life_time_line": 15}
 
 categroyMap = {'B': "BAD_PRACTICE",

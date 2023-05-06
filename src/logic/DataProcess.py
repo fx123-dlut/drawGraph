@@ -9,7 +9,7 @@ from src.tools.MathTool import MathTool
 class DataProcess:
     def __init__(self):
         self.mathTool = MathTool()
-        self.dao = FileConnector()
+        self.dao = FileConnector(skip=True)
         self.collectDatas = CollectDatas()
 
     def get_spearMan_datas(self, datas: list):

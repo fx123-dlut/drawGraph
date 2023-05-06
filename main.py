@@ -11,8 +11,8 @@ warnings.filterwarnings('ignore')
 
 if __name__ == "__main__":
     # # # TODO action占所有文件的比例，时间变化只要增加不要减少
-    for projname in projList:
-        InitTool(projname)
+    # for projname in projList:
+    #     InitTool(projname)
         # # # # 获取文件
         # # f = LifeTimeService(projname)
         # # f.get_analysis_data(projname)

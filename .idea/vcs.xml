@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-bcel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-codec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-collections" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-configuration" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-csv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-dbcp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-digester" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-fileupload" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-io" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-net" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/commons-pool" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/resource/proj/maven-dependency-plugin" vcs="Git" />
+  </component>
+</project>
