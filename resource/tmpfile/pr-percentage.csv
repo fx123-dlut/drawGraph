@@ -1,4 +1,4 @@
-Project,priority,aw,all,The density of actionable warnings
+Project,Priority level,aw,all,The density of actionable warnings
 bcel,Priority 1,8,75,0.106666667
 bcel,Priority 2,19,534,0.035580524
 bcel,Priority 3,4,422,0.009478673

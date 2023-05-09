@@ -46,7 +46,7 @@ def init_plt_years(x_label, y_label, title):
 
 
 def rank_priority():
-    tips1 = pd.read_csv("../resource/tmpfile/pr-awd.csv")
+    tips1 = pd.read_csv("../../resource/tmpfile/pr-awd.csv")
     plt.figure(figsize=(10, 6))
     init_plt_years('Project', 'Actionable warning lifespan: day(s)', '')
 

@@ -5,22 +5,24 @@ import matplotlib.font_manager as fm
 
 import warnings
 
-# from src.const.Const import pic_label_font, pic_font_size, pic_tick_font, summary_dir
+from matplotlib.ticker import MultipleLocator
 
 warnings.filterwarnings("ignore")
 
 pic_label_font = {'style': 'normal', 'weight': 'bold', 'size': 13}
 pic_tick_font = fm.FontProperties(style='normal', weight='bold', size=13)
-pic_legend_font = {'style': 'normal', 'weight': 'bold', 'size': 9}
+pic_legend_font = {'style': 'normal', 'weight': 'bold', 'size': 13}
+save_path = "/Users/mayang/PycharmProjects/summary2Excel/resource/datas/summary/2pic/"
 
 
 def init_plt_years(x_label, y_label, title):
-    # plt.rcParams['xtick.direction'] = 'in'  # 将x周的刻度线方向设置向内
-    # plt.rcParams['ytick.direction'] = 'in'  # 将y轴的刻度方向设置向内
+    plt.rcParams['xtick.direction'] = 'in'  # 将x周的刻度线方向设置向内
+    plt.rcParams['ytick.direction'] = 'in'  # 将y轴的刻度方向设置向内
     # plt.xticks(rotation=0)
     # plt.yticks(rotation=70)
+    # plt.axis('square')
 
-    # plt.grid(ls=(0, (2, 4)), c='black', linewidth=1)
+    plt.grid(ls=(0, (2, 5)), c='black', linewidth=1)
 
     plt.xlabel(x_label, fontdict=pic_label_font)
     plt.ylabel(y_label, fontdict=pic_label_font)
@@ -49,9 +51,8 @@ def init_plt_years(x_label, y_label, title):
 def priority():
     tips1 = pd.read_csv("../../resource/tmpfile/pr-rk-awd.csv")
     fig = plt.figure(figsize=(8, 7))
-    fig.subplots_adjust(bottom=0.15)
+    fig.subplots_adjust(bottom=0.2)
     init_plt_years('Prority level', 'Actionable warning lifespan: day(s)', '')
-    plt.grid(True)
     ax = sns.boxplot(
         x='Priority level',
         y="Actionable warning lifespan: day(s)",
@@ -59,6 +60,10 @@ def priority():
         width=0.6,
         linewidth=2,
         data=tips1)
+    # 添加纵向坐标轴，第一个参数是纵坐标位置
+    ax.axvline(0, ls=(0, (2, 5)), c='black', linewidth=1)
+    ax.axvline(1, ls=(0, (2, 5)), c='black', linewidth=1)
+    ax.axvline(2, ls=(0, (2, 5)), c='black', linewidth=1)
     plt.rcParams["font.weight"] = "bold"
     plt.rcParams["axes.labelweight"] = "bold"
     # plt.xticks(rotation=40)
@@ -66,23 +71,23 @@ def priority():
 
     # plt.legend(loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
     #            edgecolor='black', bbox_to_anchor=(0.5, -0.3))
+    # plt.rcParams.update({'legend.fontsize': 20, 'legend.handlelength': 2})
     leg = plt.legend(loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
-                     edgecolor='black', bbox_to_anchor=(0.5, -0.2), ncol=5, labelspacing=0.4, columnspacing=0.4,
+                     edgecolor='black', bbox_to_anchor=(0.5, -0.25), ncol=5, labelspacing=0.4, columnspacing=0.4,
                      handletextpad=0.1)
     leg.get_frame().set_linewidth(2)
 
-    plt.show()
-    # plt.savefig("priotity3", bbox_inches='tight', dpi=1000)
+    # plt.show()
+    plt.savefig(save_path + "Priority_Actionable warning lifespan: day(s)", bbox_inches='tight', dpi=1000)
 
 
 def priority_percentage():
     tips1 = pd.read_csv("../../resource/tmpfile/pr-percentage.csv")
     fig = plt.figure(figsize=(8, 7))
-    fig.subplots_adjust(bottom=0.15)
+    fig.subplots_adjust(bottom=0.2)
     init_plt_years('Project', 'The density of actionable warnings', '')
-    plt.grid(True)
     ax = sns.barplot(
-        x='priority',
+        x='Priority level',
         y='The density of actionable warnings',
         hue="Project",
         # dodge=True,
@@ -91,47 +96,52 @@ def priority_percentage():
         errcolor=".2",
         edgecolor=".2",
         data=tips1)
+    ax.axvline(0, ls=(0, (2, 5)), c='black', linewidth=1)
+    ax.axvline(1, ls=(0, (2, 5)), c='black', linewidth=1)
+    ax.axvline(2, ls=(0, (2, 5)), c='black', linewidth=1)
     plt.rcParams["font.weight"] = "bold"
     plt.rcParams["axes.labelweight"] = "bold"
     # plt.xticks(rotation=40)
     # plt.legend(loc='upper right', ncol=1, markerscale=1, labelspacing=0, handlelength=1)
-    pic_legend_font = {'style': 'normal', 'weight': 'bold', 'size': 9}
-    leg = plt.legend(loc=8, frameon=True, prop=pic_legend_font,
-                     fancybox=False,
-                     edgecolor='black', bbox_to_anchor=(0.5, -0.2), ncol=5, labelspacing=0.4, columnspacing=0.4,
+    leg = plt.legend(loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
+                     edgecolor='black', bbox_to_anchor=(0.5, -0.25), ncol=5, labelspacing=0.4, columnspacing=0.4,
                      handletextpad=0.1)
     leg.get_frame().set_linewidth(2)
-    plt.show()
-    # plt.savefig("priotity2", bbox_inches='tight', dpi=1000)
+    # plt.show()
+    plt.savefig(save_path + "Priority_The density of actionable warnings", bbox_inches='tight', dpi=1000)
 
 
 def rank():
-    tips1 = pd.read_csv("../benchmarkdata/pr-rk-awd.csv")
-    plt.figure(figsize=(8, 7))
-    init_plt_years('Project', 'Actionable warning lifespan: day(s)', '')
-    plt.grid(True)
+    tips1 = pd.read_csv("../../resource/tmpfile/pr-awd.csv")
+    fig = plt.figure(figsize=(12, 7))
+    fig.subplots_adjust(bottom=0.2)
+    init_plt_years('Rank level', 'Actionable warning lifespan: day(s)', '')
     ax = sns.boxplot(
-        x='Project',
+        x='Rank level',
         y="Actionable warning lifespan: day(s)",
-        hue="Rank",
-        hue_order=['Rank 1', 'Rank 5', 'Rank 7', 'Rank 8', 'Rank 9', 'Rank 10', 'Rank 11',
-                   'Rank 12', 'Rank 13', 'Rank 14', 'Rank 15', 'Rank 16', 'Rank 17', 'Rank 18', 'Rank 19', 'Rank 20'],
-        palette=sns.husl_palette(16, l=.5, s=.7),
-        # sns.color_palette("hls", 16),
-        linewidth=1.2,
-        width=1.5,
+        hue="Project",
+        width=1,
+        linewidth=1,
         data=tips1)
+    # 添加纵向坐标轴，第一个参数是纵坐标位置
+    for i in range(16):
+        ax.axvline(i, ls=(0, (2, 5)), c='black', linewidth=1)
+
     plt.rcParams["font.weight"] = "bold"
     plt.rcParams["axes.labelweight"] = "bold"
-    plt.xticks(rotation=40)
+    # plt.xticks(rotation=40)
     # plt.legend(loc='upper left', ncol=1, markerscale=1, labelspacing=0, handlelength=1)
-    # plt.show()
-    pic_legend_font = {'style': 'normal', 'weight': 'bold', 'size': 9}
+
+    # plt.legend(loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
+    #            edgecolor='black', bbox_to_anchor=(0.5, -0.3))
+    # plt.rcParams.update({'legend.fontsize': 20, 'legend.handlelength': 2})
     leg = plt.legend(loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
-                     edgecolor='black', bbox_to_anchor=(0.5, -0.3), ncol=5, labelspacing=0.4, columnspacing=0.4,
+                     edgecolor='black', bbox_to_anchor=(0.5, -0.25), ncol=5, labelspacing=0.4, columnspacing=0.4,
                      handletextpad=0.1)
     leg.get_frame().set_linewidth(2)
-    plt.savefig("rank3", bbox_inches='tight', dpi=1000)
+
+    # plt.show()
+    plt.savefig(save_path + "Rank_Actionable warning lifespan: day(s)", bbox_inches='tight', dpi=1000)
 
 
 def change_width(ax, new_value):
@@ -194,5 +204,5 @@ def rank_percentage1():
 if __name__ == '__main__':
     priority()
     priority_percentage()
-    # rank()
+    rank()
     # rank_percentage1()

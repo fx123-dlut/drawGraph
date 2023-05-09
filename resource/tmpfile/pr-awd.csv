@@ -1,4 +1,4 @@
-Project,Priority,rank,Actionable warning lifespan: day(s)
+Project,Priority,Rank level,Actionable warning lifespan: day(s)
 bcel,Priority 1,16,2
 bcel,Priority 2,18,0
 bcel,Priority 2,16,0

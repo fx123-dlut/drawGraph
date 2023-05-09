@@ -37,21 +37,21 @@ class SummaryProcess:
         #                                   '% of actionable warnings')
         # self.fileAndBasedBarGraphFromFile('priority', summary_dir, projList, 'Priority level',
         #                                   '# of actionable warnings')
+        self.fileAndSumBasedGraphFromFileDensityNoPercent('rank', summary_dir, projList, 'Rank level',
+                                          'The density of actionable warnings')
         self.fileAndSumBasedGraphFromFileNoPercent('rank', summary_dir, projList, 'Rank level',
-                                          '# of actionable warnings')
+                                                   '# of actionable warnings')
         # self.fileAndSumBasedGraphFromFile('priority', summary_dir, projList,
         #                                   '% of category containing actionable warnings', '% of actionable warnings')
-        # # self.get_top1_category_graph('category', summary_dir)
         # self.get_top1_graph('category', summary_dir)
         # self.get_top3_tyoes("category", summary_dir)
-        # # # self.get_top1_vtype_graph('vtype', summary_dir)
         # self.get_top3_tyoes("vtype", summary_dir)
         # self.get_top1_graph('vtype', summary_dir)
         #
         # targets = ['Cyclomatic', 'CountLine']
         # self.mutilDatasInOneGraph(targets, 'file', summary_dir)
         # self.mutilDatasInOneGraph(targets, 'method', summary_dir)
-
+        #
         # self.mutilResTypeNums('file', summary_dir)
         # self.mutilResTypeNums('method', summary_dir)
         #
@@ -101,7 +101,7 @@ class SummaryProcess:
                                           '', save_path + based + " percent nums")
         print(save_path + based + " mutil line chart pic download finish(from file)")
 
-    # 所有项目根据base进行切割并且归一后的图
+    # 横坐标类型，纵坐标数量
     def fileAndSumBasedGraphFromFileNoPercent(self, based: str, save_path, projList, x_label, y_label):
         x_datas_list = {}
         y_datas_list = {}
@@ -119,8 +119,29 @@ class SummaryProcess:
                 x_int_datas.append(int(x_datas[i]))
             x_datas_list[projname] = x_int_datas
             y_datas_list[projname] = y_int_datas
-        self.drawGraph.drawMutilLineChart(x_datas_list, y_datas_list, x_label, y_label,
-                                          '', save_path + based + " percent nums")
+        self.drawGraph.drawMutilLineChartWithoutPrecent(x_datas_list, y_datas_list, x_label, y_label,
+                                                        '', save_path + based + " actionable nums")
+        print(save_path + based + " mutil line chart pic download finish(from file)")
+
+    # 横坐标类型 纵坐标比列
+    def fileAndSumBasedGraphFromFileDensityNoPercent(self, based: str, save_path, projList, x_label, y_label):
+        x_datas_list = {}
+        y_datas_list = {}
+        for projname in projList:
+            datas = self.fileConnector.findByFixedAndProject(projname)
+            datas = self.mathTool.get_groupby_sort_data(datas, fileMap.get(based + "_line"))
+            x_datas = datas.index.tolist()
+            y_data = datas.values.tolist()
+            x_int_datas = []
+            y_int_datas = []
+            y_sum = np.sum(y_data, axis=0)[0]
+            for i in range(len(y_data)):
+                y_int_datas.append(int(y_data[i][0])/y_sum)
+                x_int_datas.append(int(x_datas[i]))
+            x_datas_list[projname] = x_int_datas
+            y_datas_list[projname] = y_int_datas
+        self.drawGraph.drawMutilLineChartWithoutPrecent(x_datas_list, y_datas_list, x_label, y_label,
+                                                        '', save_path + based + " actionable density nums")
         print(save_path + based + " mutil line chart pic download finish(from file)")
 
     def fileAndSumBarGraphFromFile(self, based: str, save_path, projList, x_label, y_label):

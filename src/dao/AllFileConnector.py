@@ -11,6 +11,28 @@ from src.tools.FileTool import FileTool
 
 
 class AllFileConnector:
+    # def __init__(self):
+    #     root_dir = Const.base_dir + "resource/final/"
+    #     self.alldatas = {}
+    #     self.datas = []
+    #     self.f = FileTool()
+    #     for proj in Const.projList:
+    #         files = root_dir + picProjList[Const.projList.index(proj)] + ".csv"
+    #         tmpdatas = []
+    #         for file in [files]:
+    #             data = self.f.get_data_from_file(file, "")[1:]
+    #             now_data = []
+    #             for i in data:
+    #                 # if "Test.java" in i[fileMap.get('file_line')] or 'src/test' in i[fileMap.get('file_line')]:
+    #                 #     continue
+    #                 # if i[fileMap.get('resolution_line')] == '':
+    #                 #     i[fileMap.get('resolution_line')] = 'unfixed'
+    #                 # i[fileMap.get("category_line")] = categroyMap.get(i[fileMap.get('category_line')])
+    #                 now_data.append(i[:fileMap.get("resolution_line") + 1])
+    #             tmpdatas = tmpdatas + now_data
+    #         self.datas += tmpdatas
+    #         self.alldatas[proj] = tmpdatas
+
     def __init__(self):
         root_dir = Const.base_dir + "resource/final/"
         self.alldatas = {}
@@ -18,20 +40,9 @@ class AllFileConnector:
         self.f = FileTool()
         for proj in Const.projList:
             files = root_dir + picProjList[Const.projList.index(proj)] + ".csv"
-            tmpdatas = []
-            for file in [files]:
-                data = self.f.get_data_from_file(file, "")[1:]
-                now_data = []
-                for i in data:
-                    # if "Test.java" in i[fileMap.get('file_line')] or 'src/test' in i[fileMap.get('file_line')]:
-                    #     continue
-                    # if i[fileMap.get('resolution_line')] == '':
-                    #     i[fileMap.get('resolution_line')] = 'unfixed'
-                    # i[fileMap.get("category_line")] = categroyMap.get(i[fileMap.get('category_line')])
-                    now_data.append(i[:fileMap.get("resolution_line") + 1])
-                tmpdatas = tmpdatas + now_data
-            self.datas += tmpdatas
-            self.alldatas[proj] = tmpdatas
+            data = self.f.get_data_from_csv(files, "")[1:]
+            self.datas += data
+            self.alldatas[proj] = data
 
     def findByFixedAndProject(self, projName: str):
         def get_fixed_target(x):

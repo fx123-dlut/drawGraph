@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pandas import DataFrame
 
 from src.const.Const import fileMap
 
@@ -97,7 +98,7 @@ class MathTool:
         return x_datas
 
     # lifeTime分组获得平均值
-    def get_average_groupBy_based(self, datas: list, based: int, target: int, type="") -> pd.DataFrame:
+    def get_average_groupBy_based(self, datas: list, based: int, target, type="") -> pd.DataFrame:
         df = pd.DataFrame(datas)
         x_datas = df.loc[(type == df[fileMap.get("resolution_line")])].groupby(based)[target].mean()
         return x_datas
@@ -193,3 +194,52 @@ class MathTool:
             else:
                 res[i[fileMap.get(based_line + "_line")]] = [int(i[fileMap.get(target_line + "_line")])]
         return res
+
+    # 获取数量、密度、最大值、最小值、平均值、中值
+    def get_nums_density_max_min_average_mid(self, proj, datas: list, base, target=15, mark=18):
+        res = []
+        df = pd.DataFrame(datas)
+        tmp = df.iloc[:, [base, target, 18]]
+        datas = tmp.groupby(base)
+        for name, data in datas:
+            group_df = self.get_groupbyTFP_datas_num(data)
+            try:
+                tp_nums = group_df['TP']
+                density = group_df['TP'] / len(data)
+                max = self.get_max_nums(data, mark, target, 'TP')
+                min = self.get_min_nums(data, mark, target, 'TP')
+                ave = self.get_ave_nums(data, mark, target, 'TP')
+                mid = self.get_mid_nums(data, mark, target, 'TP')
+            except:
+                tp_nums = 0
+                density = 0
+                max = 0
+                min = 0
+                ave = 0
+                mid = 0
+            res.append([proj, name, tp_nums, density, max, min, ave, mid, len(data)])
+
+        def sort_function(x):
+            return x[2]
+
+        res.sort(key=sort_function)
+        return res
+
+    # 根据resolution_line 进行分组统计数量
+    def get_groupbyTFP_datas_num(self, df: DataFrame):
+        return df[fileMap.get("resolution_line")].value_counts()
+
+    # 获取平均值
+    def get_ave_nums(self, df: DataFrame, base, target, target_value):
+        return df.groupby(base)[target].mean()[target_value]
+
+    # 获取最大值
+    def get_max_nums(self, df: DataFrame, base, target, target_value):
+        return df.groupby(base)[target].max()[target_value]
+
+    # 获取最小值
+    def get_min_nums(self, df: DataFrame, base, target, target_value):
+        return df.groupby(base)[target].min()[target_value]
+
+    def get_mid_nums(self, df: DataFrame, base, target, target_value):
+        return df.groupby(base)[target].median()[target_value]

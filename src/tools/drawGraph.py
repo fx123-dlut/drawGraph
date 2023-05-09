@@ -10,7 +10,7 @@ from src.logic.CollectDatas import CollectDatas
 
 class DrawGraph:
     def __init__(self):
-        self.point_style = ['o', '>', '+', 's', '*', 'H', 'x', 'd', '^', 'v']
+        self.point_style = ['o', '>', 'p', 's', '*', 'H', 'P', 'd', '^', 'v']
         return
 
     # def drawLineChart(self, x_data: list, y_data: list, x_label: str, y_label: str, title: str, save_path: str):
@@ -54,7 +54,7 @@ class DrawGraph:
     def drawLineChart(self, x_data: list, y_data: list, x_label: str, y_label: str, title: str, save_path: str):
         self.init_plt(x_label, y_label, title)
 
-        plt.scatter(x_data, y_data, marker=self.point_style[0], edgecolor='black', linewidths=0.5, s=100)
+        plt.scatter(x_data, y_data, marker=self.point_style[0], edgecolor='black')
 
         plt.savefig(save_path + title, dpi=1000)
         # plt.show()
@@ -71,14 +71,42 @@ class DrawGraph:
         for i in x_data.values():
             for j in i:
                 max_x = max(int(j), max_x)
-        self.init_plt_without_precent(x_label, y_label, max_x, max_y, title)
+        self.init_plt(x_label, y_label, title)
         i = 0
         for projname in x_data.keys():
-            plt.scatter(x_data.get(projname), y_data.get(projname), marker=self.point_style[i], edgecolor='black',
-                        linewidths=0.5, s=100)
+            # plt.scatter(x_data.get(projname), y_data.get(projname), marker=self.point_style[i], edgecolor='black',
+            # linewidths=0.5, s=100)
+            plt.scatter(x_data.get(projname), y_data.get(projname), marker=self.point_style[i], edgecolor='black')
             i += 1
         leg = plt.legend(picProjList, loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
                          edgecolor='black', bbox_to_anchor=(0.5, -0.3), ncol=5, labelspacing=0.4, columnspacing=0.4,
+                         handletextpad=0.1)
+        leg.get_frame().set_linewidth(2)
+        plt.savefig(save_path + title, bbox_inches='tight', dpi=1000)
+        plt.cla()
+        plt.clf()
+        plt.close()
+        print(save_path + title + " saved finish")
+
+    def drawMutilLineChartWithoutPrecent(self, x_data: dict, y_data: dict, x_label: str, y_label: str, title: str,
+                                         save_path: str):
+        max_y = 0
+        max_x = 0
+        for i in y_data.values():
+            for j in i:
+                max_y = max(float(j), max_y)
+        for i in x_data.values():
+            for j in i:
+                max_x = max(float(j), max_x)
+        self.init_plt_density_without_precent(x_label, y_label, max_x, max_y, title)
+        i = 0
+        for projname in x_data.keys():
+            # plt.scatter(x_data.get(projname), y_data.get(projname), marker=self.point_style[i], edgecolor='black',
+            # linewidths=0.5, s=100)
+            plt.scatter(x_data.get(projname), y_data.get(projname), marker=self.point_style[i], edgecolor='black')
+            i += 1
+        leg = plt.legend(picProjList, loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
+                         edgecolor='black', bbox_to_anchor=(0.5, -0.25), ncol=5, labelspacing=0.4, columnspacing=0.4,
                          handletextpad=0.1)
         leg.get_frame().set_linewidth(2)
         plt.savefig(save_path + title, bbox_inches='tight', dpi=1000)
@@ -138,8 +166,9 @@ class DrawGraph:
         self.init_plt_years(x_label, y_label, "")
         i = 0
         for projname in x_data.keys():
-            plt.plot(x_data.get(projname), y_data.get(projname), linestyle='-', marker=self.point_style[i],
-                     linewidths=0.5, s=100)
+            # plt.plot(x_data.get(projname), y_data.get(projname), linestyle='-', marker=self.point_style[i],
+            #          linewidths=0.5, s=100)
+            plt.plot(x_data.get(projname), y_data.get(projname), linestyle='-', marker=self.point_style[i])
             i += 1
 
         leg = plt.legend(picProjList, loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
@@ -186,7 +215,7 @@ class DrawGraph:
         # picProjList.sort()
 
         for i in range(len(x_datas)):
-            plt.scatter(x_datas[i], y_datas[i], label=line_labels[i], marker=self.point_style[i])
+            plt.scatter(x_datas[i], y_datas[i], label=line_labels[i], marker=self.point_style[i], edgecolor='black')
             leg = plt.legend(picProjList, loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
                              edgecolor='black', bbox_to_anchor=(0.5, -0.25), ncol=5, labelspacing=0.4,
                              columnspacing=0.4,
@@ -310,9 +339,9 @@ class DrawGraph:
         plt.ylabel(y_label, fontdict=pic_label_font)
         plt.title(title, fontsize=pic_font_size)
 
-        x_major_locator = MultipleLocator(int(max_x/20))
+        x_major_locator = MultipleLocator(int(max_x / 20))
         # 把x轴的刻度间隔设置为1，并存在变量里
-        y_major_locator = MultipleLocator(int(max_y/20))
+        y_major_locator = MultipleLocator(max(int(max_y / 20), 0.1))
         # 把y轴的刻度间隔设置为10，并存在变量里
         ax = plt.gca()
         # ax为两条坐标轴的实例
@@ -344,11 +373,56 @@ class DrawGraph:
         ax.spines['bottom'].set_color((0, 0, 0, 1))
         ax.spines['bottom'].set_linewidth(bwith)
 
-        plt.xlim(0, max_x+1)
-        plt.ylim(0, max_y+1)
-        # plt.xticks(np.asarray([i+1 for i in range(20)]), size=pic_font_size)
-        # plt.xticks(np.asarray([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]), size=pic_font_size)
-        # plt.yticks(np.asarray([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]), size=pic_font_size)
+        plt.xlim(0, max_x + 1)
+        plt.ylim(0, max_y + 1)
+
+    def init_plt_density_without_precent(self, x_label, y_label, max_x, max_y, title):
+        plt.rcParams['xtick.direction'] = 'in'  # 将x周的刻度线方向设置向内
+        plt.rcParams['ytick.direction'] = 'in'  # 将y轴的刻度方向设置向内
+        # plt.axis('square')
+
+        plt.grid(ls=(0, (2, 4)), c='black', linewidth=1)
+
+        plt.xlabel(x_label, fontdict=pic_label_font)
+        plt.ylabel(y_label, fontdict=pic_label_font)
+        plt.title(title, fontsize=pic_font_size)
+
+        x_major_locator = MultipleLocator(int(max_x / 20))
+        # 把x轴的刻度间隔设置为1，并存在变量里
+        y_major_locator = MultipleLocator(max(int(max_y / 20), 0.1))
+        # 把y轴的刻度间隔设置为10，并存在变量里
+        ax = plt.gca()
+        # ax为两条坐标轴的实例
+        ax.xaxis.set_major_locator(x_major_locator)
+        # 把x轴的主刻度设置为1的倍数
+        ax.yaxis.set_major_locator(y_major_locator)
+
+        for xtl in ax.get_xticklines():
+            xtl.set_markersize(5)  # length
+            xtl.set_markeredgewidth(1)  # width
+
+        for ytl in ax.get_yticklines():
+            ytl.set_markersize(5)
+            ytl.set_markeredgewidth(1)
+
+        for xtlabel in ax.get_xticklabels():
+            xtlabel.set_fontproperties(pic_tick_font)
+
+        for ytlabel in ax.get_yticklabels():
+            ytlabel.set_fontproperties(pic_tick_font)
+
+        bwith = 2
+        ax.spines['left'].set_color((0, 0, 0, 1))
+        ax.spines['left'].set_linewidth(bwith)
+        ax.spines['right'].set_color((0, 0, 0, 1))
+        ax.spines['right'].set_linewidth(bwith)
+        ax.spines['top'].set_color((0, 0, 0, 1))
+        ax.spines['top'].set_linewidth(bwith)
+        ax.spines['bottom'].set_color((0, 0, 0, 1))
+        ax.spines['bottom'].set_linewidth(bwith)
+
+        plt.xlim(0, max_x + 1)
+        plt.ylim(0, 1)
 
     def init_plt_years(self, x_label, y_label, title):
         plt.rcParams['xtick.direction'] = 'in'  # 将x周的刻度线方向设置向内
