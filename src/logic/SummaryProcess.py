@@ -7,6 +7,7 @@ from src.const.Const import fileMap, projList, summary_dir, base_dir, picProjLis
 from src.dao.AllFileConnector import AllFileConnector
 from src.logic.CollectDatas import CollectDatas
 from src.logic.DataProcess import DataProcess
+from src.logic.FromSummaryDrawPic import FromSummaryDrawPic
 from src.tools.FileTool import FileTool
 from src.tools.MathTool import MathTool
 from src.tools.drawGraph import DrawGraph
@@ -25,6 +26,7 @@ class SummaryProcess:
         self.mathTool = MathTool()
         self.dataProcess = DataProcess()
         self.ft = FileTool()
+        self.fsdp = FromSummaryDrawPic()
 
     def main_process(self):
         # self.fileAndSumBasedGraphFromFile('category', summary_dir, projList,
@@ -37,10 +39,10 @@ class SummaryProcess:
         #                                   '% of actionable warnings')
         # self.fileAndBasedBarGraphFromFile('priority', summary_dir, projList, 'Priority level',
         #                                   '# of actionable warnings')
-        self.fileAndSumBasedGraphFromFileDensityNoPercent('rank', summary_dir, projList, 'Rank level',
-                                          'The density of actionable warnings')
-        self.fileAndSumBasedGraphFromFileNoPercent('rank', summary_dir, projList, 'Rank level',
-                                                   '# of actionable warnings')
+        # self.fileAndSumBasedGraphFromFileDensityNoPercent('rank', summary_dir, projList, 'Rank level',
+        #                                   'The density of actionable warnings')
+        # self.fileAndSumBasedGraphFromFileNoPercent('rank', summary_dir, projList, 'Rank level',
+        #                                            '# of actionable warnings')
         # self.fileAndSumBasedGraphFromFile('priority', summary_dir, projList,
         #                                   '% of category containing actionable warnings', '% of actionable warnings')
         # self.get_top1_graph('category', summary_dir)
@@ -48,15 +50,19 @@ class SummaryProcess:
         # self.get_top3_tyoes("vtype", summary_dir)
         # self.get_top1_graph('vtype', summary_dir)
         #
-        # targets = ['Cyclomatic', 'CountLine']
-        # self.mutilDatasInOneGraph(targets, 'file', summary_dir)
-        # self.mutilDatasInOneGraph(targets, 'method', summary_dir)
+        targets = ['Cyclomatic', 'CountLine']
+        self.mutilDatasInOneGraph(targets, 'file', summary_dir)
+        self.mutilDatasInOneGraph(targets, 'method', summary_dir)
         #
         # self.mutilResTypeNums('file', summary_dir)
         # self.mutilResTypeNums('method', summary_dir)
         #
         # self.getFixedNumsGroupByBased("rank", summary_dir)
         # self.getFixedNumsGroupByBased("priority", summary_dir)
+
+        # 横坐标文件数量的百分比，纵坐标根据数量排序后的对应type密度的累计值
+        target_type = ['method', 'file']
+        self.fsdp.get_density_percent_pic_by_target(target_type)
         return
 
     def fileAndBasedBarGraphFromFile(self, based: str, save_path, projList, x_label, y_label):
@@ -136,7 +142,7 @@ class SummaryProcess:
             y_int_datas = []
             y_sum = np.sum(y_data, axis=0)[0]
             for i in range(len(y_data)):
-                y_int_datas.append(int(y_data[i][0])/y_sum)
+                y_int_datas.append(int(y_data[i][0]) / y_sum)
                 x_int_datas.append(int(x_datas[i]))
             x_datas_list[projname] = x_int_datas
             y_datas_list[projname] = y_int_datas
@@ -233,6 +239,10 @@ class SummaryProcess:
 
     # 绘制所有项目的metrics百分比图，每个metrics一个图片
     def mutilDatasInOneGraph(self, targets: list, based, save_path, projList=projList):
+        type_map = {
+            "CountLine": "LoC",
+            "Cyclomatic": "cyclomatic"
+        }
         # 获取根据fixed数量排序的file name list
         x_datas_dict = {}
         y_datas_dict = {}
@@ -240,6 +250,7 @@ class SummaryProcess:
         for projName in projList:
             sorted_datas = self.fileConnector.findByFixedAndProject(projName)
             sorted_datas = self.mathTool.get_groupby_sort_data(sorted_datas, fileMap.get(based + "_line"))
+            # sorted_based_list = sorted_datas
             sorted_based_list = sorted_datas.index.tolist()
             m = MetricsProcess(base_dir + "resource/proj/" + projName + "/", False)
             datas = m.get_data_from_file(base_dir + "resource/datas/" + projName + "/")
@@ -256,8 +267,9 @@ class SummaryProcess:
                 y_datas_list.append(y_datas_dict[projName][i])
             self.drawGraph.mutilDatasInOneGraph(x_datas_list, y_datas_list, projList,
                                                 "% of " + based + ' containing actionable warnings',
-                                                "% of " + titles[i],
-                                                '', save_path + based + " with " + targets[i])
+                                                "% of " + type_map.get(targets[i], targets[i]),
+                                                # '', save_path + based + " with " + targets[i])
+                                                '', save_path + based + " with " + type_map.get(targets[i], targets[i]))
         print(based + " and complexity.png has finished")
 
     # 统计统一项目下，各个类型的数量

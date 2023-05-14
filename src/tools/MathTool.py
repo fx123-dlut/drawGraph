@@ -74,6 +74,18 @@ class MathTool:
         datas = tmp.groupby(idx1).agg(np.count_nonzero).apply(lambda x: x.sort_values(0, ascending=False))
         return datas
 
+    def get_groupby_mean_sort_data(self, init_datas, idx1, idx2=0) -> pd.DataFrame:
+        if len(init_datas) == 0:
+            return 0
+        if idx1 == idx2:
+            idx2 = 1
+        df = pd.DataFrame(init_datas)
+        tmp = df.iloc[:, [idx1, idx2]]
+        # datas = tmp.groupby(idx1).agg(np.mean).apply(lambda x: x.sort_values(0, ascending=False))
+        datas = tmp.groupby(idx1).mean()
+        datas = datas.sort_values(idx2, ascending=False)
+        return datas
+
     def get_groupby_average_data(self, init_datas, idx1, idx2=0) -> pd.DataFrame:
         df = pd.DataFrame(init_datas)
         tmp = df.iloc[:, [idx1, idx2]]

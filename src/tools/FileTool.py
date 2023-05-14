@@ -35,6 +35,10 @@ class FileTool:
         file_dir = path + fileName
         return pd.read_csv(file_dir).values.tolist()
 
+    def get_data_from_csv_df(self, fileName, path=tmp_dir):
+        file_dir = path + fileName
+        return pd.read_csv(file_dir)
+
     def save_datas2target_path(self, headers, datas, path):
         with open(path + ".csv", 'w', newline="") as f:
             writer = csv.writer(f)

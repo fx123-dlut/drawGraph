@@ -217,7 +217,7 @@ class DrawGraph:
         for i in range(len(x_datas)):
             plt.scatter(x_datas[i], y_datas[i], label=line_labels[i], marker=self.point_style[i], edgecolor='black')
             leg = plt.legend(picProjList, loc=8, frameon=True, prop=pic_legend_font, fancybox=False,
-                             edgecolor='black', bbox_to_anchor=(0.5, -0.25), ncol=5, labelspacing=0.4,
+                             edgecolor='black', bbox_to_anchor=(0.5, -0.3), ncol=5, labelspacing=0.4,
                              columnspacing=0.4,
                              handletextpad=0.1)
             leg.get_frame().set_linewidth(2)
